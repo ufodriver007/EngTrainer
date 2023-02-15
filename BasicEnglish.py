@@ -1,8 +1,8 @@
 """
-Simple English trainer with 3 dictionaries(800 words, 3000 words, 5000 words)
+Simple English trainer with 5 dictionaries(800 words, 3000 words, 5000 words, py_docs)
 and another one custom dictionary. You can add any word that is contained in
-dictionary to your custom one. There is 2 modes(English words first or russian words first).
-ver. 0.3b
+dictionary to your custom one. There is 2 modes(english words first or russian words first).
+ver. 0.4b
 """
 
 import tkinter.messagebox
