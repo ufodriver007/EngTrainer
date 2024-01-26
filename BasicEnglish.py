@@ -2,7 +2,7 @@
 Simple English trainer with 4 dictionaries(800 words, 3000 words, 5000 words, py_docs)
 and another one custom dictionary. You can add any word that contained in
 a dictionary to your custom one. There are 2 modes(english words first or russian words first).
-ver. 0.5b
+ver. 0.6b
 """
 import threading
 import time
@@ -152,7 +152,7 @@ def abouta():
     top.iconphoto(False, photo)
     lbbg = Label(top, text="", bg='gray')
     lbbg.place(width=500, height=200)
-    lb = Label(top, text="English Trainer 0.5b\n\n by UFODriver. 2023", font=("Arial Bold", 16), bg='gray')
+    lb = Label(top, text="English Trainer 0.6b\n\n by UFODriver. 2024", font=("Arial Bold", 16), bg='gray')
     lb.place(x=250, y=80, anchor='center')
 
     top.transient(window)
