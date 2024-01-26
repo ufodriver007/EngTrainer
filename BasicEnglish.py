@@ -22,6 +22,7 @@ window.resizable(False, False)
 photo = PhotoImage(file='icon.png')       # переменная с иконкой
 window.iconphoto(False, photo)
 
+dictionaries = ['dict800', 'dict3000', 'dict5000', 'my_words', 'py_docs']
 currentDictionary = 'dict800'             # текущий словарь
 radSelected = IntVar()                    # радиокнопка словаря
 radEngRus = IntVar()                      # радиокнопка английские/русские слова сначала
@@ -163,6 +164,52 @@ def abouta():
     top.wait_window()
 
 
+def search_form():
+    """
+    Create window with search form
+    """
+    def find_word():
+        word = en.get()
+
+        for curr_dict in dictionaries:
+            try:
+                cursor.execute(f"SELECT eng, rus FROM {curr_dict} WHERE eng='{word}' OR rus='{word}' LIMIT 1")
+                dict_res = cursor.fetchone()       # лист кортежей, в каждом - строка из БД
+                if dict_res:
+                    result = f'[{curr_dict}] {dict_res[0]} - {dict_res[1]}'
+                    res.configure(text=result)
+                    break
+                else:
+                    result = f'Не найдено'
+                res.configure(text=result)
+            except sqlite3.OperationalError:
+                tkinter.messagebox.showerror(title='Ошибка', message='Ошибка базы данных!')
+
+    top = Toplevel(window)
+
+    top.title("Поиск слова по всем словарям")
+    top.geometry('500x200+700+400')
+    top.resizable(False, False)
+
+    top.iconphoto(False, photo)
+    en = Entry(top)
+    en.place(x=250, y=60, anchor='center')
+
+    find_it = Button(top, text="Найти", font=("Arial Bold", 16), bg='#567', command=find_word)
+    find_it.place(x=350, y=40)
+
+    res = Label(top, text="", font=("Arial Bold", 16), bg='gray')
+    res.place(x=250, y=120, anchor='center')
+
+    top.transient(window)
+    # мы передаем поток данному виджету т.е. делаем его модальным
+    top.grab_set()
+    # фокусируем наше приложение на окне top
+    top.focus_set()
+    # мы задаем приложению команду, что пока не будет закрыто окно top пользоваться другим окном будет нельзя
+    top.wait_window()
+
+
 def i_know_word():
     """Exam button 'I know this word'"""
     global known_words
@@ -237,6 +284,7 @@ def btn_end_exam():
     menubar.entryconfig('Неправильные глаголы', state='normal')
     menubar.entryconfig('Экзамен', state='normal')
     menubar.entryconfig('О программе', state='normal')
+    menubar.entryconfig('Искать слово', state='normal')
 
 
 def examine():
@@ -279,6 +327,7 @@ def examine():
     menubar.entryconfig('Неправильные глаголы', state="disabled")
     menubar.entryconfig('Экзамен', state="disabled")
     menubar.entryconfig('О программе', state="disabled")
+    menubar.entryconfig('Искать слово', state="disabled")
 
 
 def verb():
@@ -430,6 +479,10 @@ exam.add_command(label='Экзамен', command=examine)
 about = Menu(menubar, tearoff=0)
 menubar.add_cascade(label='О программе', menu=about)
 about.add_command(label='О программе', command=abouta)
+
+search = Menu(menubar, tearoff=0)
+menubar.add_cascade(label='Искать слово', menu=search)
+search.add_command(label='Искать слово', command=search_form)
 
 window.config(menu=menubar)
 
